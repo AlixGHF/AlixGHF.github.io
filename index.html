@@ -25,28 +25,17 @@
   <p><em>Welcome to my corner of the internet — where I attempt to romanticise angst and express my inner world through words.</em></p>
 </main>
 
-<div id="poem-slider">
-  <div class="slide">The moon shone on the room...</div>
-  <div class="slide">I started smoking — when I’m stressed...</div>
-  <div class="slide">When’d you last stay the night?</div>
+  
+<div class="featured-poems">
+  <h3><a href="poems/untitled.html">Untitled</a></h3>
+  <p>The moon shone on the room,<br>the room we’d shared...</p>
+
+  <h3><a href="poems/ghost.html">Ghost</a></h3>
+  <p>I started smoking — when I’m stressed...</p>
+
+  <h3><a href="poems/expired.html">Expired</a></h3>
+  <p>When’d you last stay the night?...</p>
 </div>
-
-<script>
-let slides = document.querySelectorAll('#poem-slider .slide');
-let index = 0;
-slides.forEach((s,i) => i!=0 ? s.style.display='none' : s.style.display='block');
-
-setInterval(() => {
-  slides[index].style.display = 'none';
-  index = (index+1) % slides.length;
-  slides[index].style.display = 'block';
-}, 5000);
-</script>
-
-<style>
-#poem-slider { font-style: italic; margin-top: 20px; }
-#poem-slider .slide { transition: opacity 1s ease; }
-</style>
 
   
 <footer>
