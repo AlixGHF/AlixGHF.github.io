@@ -92,13 +92,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
   headers.forEach(header => {
     header.addEventListener("click", () => {
-      const content = header.nextElementSibling;
-      content.classList.toggle("collapsed");
-      header.classList.toggle("collapsed");
+      // Find the first .poem-list inside the same section
+      const content = header.parentElement.querySelector(".poem-list");
+      if (content) {
+        content.classList.toggle("collapsed");
+        header.classList.toggle("collapsed");
+      }
     });
   });
 });
 </script>
+
 
   
 </body>
