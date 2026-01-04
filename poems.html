@@ -3,6 +3,39 @@
 <head>
 <title>Poems — AlixGHF</title>
 <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Collapsible headings */
+.collapsible {
+  cursor: pointer;
+  user-select: none;
+  margin: 20px 0 10px;
+  padding: 5px 0;
+}
+
+/* Hidden content */
+.poem-list {
+  display: block; /* starts visible */
+  margin-left: 20px;
+  transition: max-height 0.3s ease;
+}
+
+/* Hidden state */
+.poem-list.collapsed {
+  display: none;
+}
+
+/* Optional: arrow rotation when collapsed */
+.collapsible::after {
+  content: " ▼";
+  font-size: 0.9em;
+}
+
+.collapsible.collapsed::after {
+  content: " ▶";
+}
+
+  </style>
 </head>
 <body>
 
@@ -18,11 +51,27 @@
 
 <main>
 
-<ul>
-  <li><a href="poems/untitled.html">Untitled</a> — 16/06/2022</li>
-  <li><a href="poems/ghost.html">Ghost</a> — 15/07/2025</li>
-  <li><a href="poems/expired.html">Expired</a> — 14/07/2025</li>
-</ul>
+<section class="poem-section">
+  <h2 class="collapsible">Current Poems ▼</h2>
+  <div class="poem-list">
+    <ul>
+      <li><a href="poems/untitled.html">Untitled</a> — 16/06/2022</li>
+      <li><a href="poems/ghost.html">Ghost</a> — 15/07/2025</li>
+      <li><a href="poems/expired.html">Expired</a> — 14/07/2025</li>
+    </ul>
+  </div>
+</section>
+
+<section class="poem-section">
+  <h2 class="collapsible">Early Works ▼</h2>
+  <div class="poem-list">
+    <p><em>A few poems from when I first started writing — imperfect, but part of my journey.</em></p>
+    <ul>
+      <li><a href="poems/early1.html">First Attempt</a> — 01/01/2020</li>
+      <li><a href="poems/early2.html">Beginnings</a> — 12/03/2020</li>
+    </ul>
+  </div>
+</section>
 
 </main>
 
@@ -30,5 +79,21 @@
   &copy; 2026 AlixGHF. All rights reserved.
 </footer>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const headers = document.querySelectorAll(".collapsible");
+
+  headers.forEach(header => {
+    header.addEventListener("click", () => {
+      const content = header.nextElementSibling;
+      content.classList.toggle("collapsed");
+      header.classList.toggle("collapsed");
+    });
+  });
+});
+</script>
+
+  
 </body>
 </html>
