@@ -8,24 +8,30 @@
  <style>
 /* Featured Poems Carousel */
 .featured-wrapper {
-  max-width: 700px;
+  max-width: 900px;
   margin: 80px auto;
-  padding: 30px;
+  padding: 40px 0;
   border: 1px solid #ddd;
   background: #fafafa;
-  text-align: center;
   position: relative;
+  overflow: hidden;
 }
 
-/* Blur fade at edges */
+.featured-wrapper h2 {
+  text-align: center;
+  font-weight: normal;
+  margin-bottom: 30px;
+}
+
+/* Fade edges */
 .featured-wrapper::before,
 .featured-wrapper::after {
   content: "";
   position: absolute;
   top: 0;
-  width: 60px;
+  width: 120px;
   height: 100%;
-  z-index: 2;
+  z-index: 3;
   pointer-events: none;
 }
 
@@ -39,58 +45,40 @@
   background: linear-gradient(to left, #fafafa, transparent);
 }
 
-/* Poem container */
+/* Track */
+.carousel-track {
+  display: flex;
+  gap: 40px;
+  transition: transform 0.4s ease;
+  padding: 0 120px;
+}
+
+/* Poems */
 .featured-poem {
-  display: none;
+  min-width: 500px;
   background: #fff;
   padding: 30px;
   border: 1px solid #e0e0e0;
   line-height: 1.7;
 }
 
-.featured-poem.active {
-  display: block;
-}
-
-/* Arrows */
-.carousel-arrow {
-  cursor: pointer;
-  font-size: 1.5em;
-  padding: 10px;
-  user-select: none;
-}
-
+/* Controls */
 .carousel-controls {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
+  margin: 20px 40px 0;
 }
+
+.carousel-arrow {
+  cursor: pointer;
+  font-size: 1.5em;
+  user-select: none;
+}
+
 
  </style>
 </head>
 
-
- <script>
-  let currentPoem = 0;
-  const poems = document.querySelectorAll(".featured-poem");
-
-  function showPoem(index) {
-    poems.forEach((poem, i) => {
-      poem.classList.toggle("active", i === index);
-    });
-  }
-
-  function nextPoem() {
-    currentPoem = (currentPoem + 1) % poems.length;
-    showPoem(currentPoem);
-  }
-
-  function prevPoem() {
-    currentPoem = (currentPoem - 1 + poems.length) % poems.length;
-    showPoem(currentPoem);
-  }
-</script>
 
  
 <body>
@@ -117,81 +105,70 @@
 <section class="featured-wrapper">
   <h2>Featured Poems</h2>
 
-  <!-- Poem 1 -->
-  <div class="featured-poem active">
-    <h3>Untitled</h3>
+  <div class="carousel-track" id="carouselTrack">
 
-    <p>
-      The moon shone on the room,<br>
-      The room we’d shared.<br>
-      Our memories replaying inside,<br>
-      As if time had stopped within.
-    </p>
+    <div class="featured-poem">
+      <h3>Untitled</h3>
+      <p>The moon shone on the room,<br>The room we’d shared.</p>
+      <a href="poems/untitled.html">Read full poem →</a>
+    </div>
 
-    <p>
-      I stay there when I want to feel you,<br>
-      Because time hasn’t been good to us.<br>
-      Seeing you in our room,<br>
-      When you’re not there.
-    </p>
+    <div class="featured-poem">
+      <h3>Ghost</h3>
+      <p>I started smoking — when I’m stressed.</p>
+      <a href="poems/ghost.html">Read full poem →</a>
+    </div>
 
-    <a href="poems/untitled.html">Read full poem →</a>
+    <div class="featured-poem">
+      <h3>Expired</h3>
+      <p>When’d you last stay the night?</p>
+      <a href="poems/expired.html">Read full poem →</a>
+    </div>
+
   </div>
 
-  <!-- Poem 2 -->
-  <div class="featured-poem">
-    <h3>Ghost</h3>
-
-    <p>
-      I started smoking — when I’m stressed,<br>
-      It makes me feel closer to you — the brand you always used.<br>
-      It’s not good for me—I know—don’t tell mum,<br>
-      But the smell—brings me back—to my childhood.
-    </p>
-
-    <p>
-      The taste — bitter on my tongue,<br>
-      Burning my throat.<br>
-      Making it feel more—like a chore,<br>
-      But—what can I do—I can’t let go.
-    </p>
-
-    <a href="poems/ghost.html">Read full poem →</a>
-  </div>
-
-  <!-- Poem 3 -->
-  <div class="featured-poem">
-    <h3>Expired</h3>
-
-    <p>
-      When’d you last stay the night?<br>
-      I don’t even want to guess.<br>
-      Though it doesn’t stop me hoping,<br>
-      Buying enough groceries for two—like that would make you stay.
-    </p>
-
-    <p>
-      If gestures could move you,<br>
-      You’d be in my arms already.<br>
-      Watching — waiting — as the groceries go off,<br>
-      In a home that only hears the voice of one.
-    </p>
-
-    <a href="poems/expired.html">Read full poem →</a>
-  </div>
-
-  <!-- Controls -->
   <div class="carousel-controls">
     <span class="carousel-arrow" onclick="prevPoem()">←</span>
     <span class="carousel-arrow" onclick="nextPoem()">→</span>
   </div>
 </section>
-
-
   
 <footer>
   &copy; 2026 AlixGHF. All rights reserved.
 </footer>
 
+ 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const track = document.getElementById("carouselTrack");
+    const poems = document.querySelectorAll(".featured-poem");
+
+    if (!track || poems.length === 0) return;
+
+    const gap = 40; // must match CSS gap
+    const poemWidth = poems[0].offsetWidth + gap;
+    let currentPoem = 0;
+
+    function updateCarousel() {
+      track.style.transform = `translateX(${-currentPoem * poemWidth}px)`;
+    }
+
+    window.nextPoem = function () {
+      if (currentPoem < poems.length - 1) {
+        currentPoem++;
+        updateCarousel();
+      }
+    };
+
+    window.prevPoem = function () {
+      if (currentPoem > 0) {
+        currentPoem--;
+        updateCarousel();
+      }
+    };
+  });
+</script>
+
+ 
 </body>
 </html>
