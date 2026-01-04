@@ -69,6 +69,30 @@
 
  </style>
 </head>
+
+
+ <script>
+  let currentPoem = 0;
+  const poems = document.querySelectorAll(".featured-poem");
+
+  function showPoem(index) {
+    poems.forEach((poem, i) => {
+      poem.classList.toggle("active", i === index);
+    });
+  }
+
+  function nextPoem() {
+    currentPoem = (currentPoem + 1) % poems.length;
+    showPoem(currentPoem);
+  }
+
+  function prevPoem() {
+    currentPoem = (currentPoem - 1 + poems.length) % poems.length;
+    showPoem(currentPoem);
+  }
+</script>
+
+ 
 <body>
 
 <header>
