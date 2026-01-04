@@ -63,11 +63,32 @@
 }
 
 /* Controls */
-.carousel-controls {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px 40px 0;
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2em;
+  cursor: pointer;
+  user-select: none;
+  z-index: 4;
+  padding: 10px;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
 }
+
+.carousel-arrow:hover {
+  opacity: 1;
+}
+
+.carousel-arrow.left {
+  left: 15px;
+}
+
+.carousel-arrow.right {
+  right: 15px;
+}
+
+
 
 .carousel-arrow {
   cursor: pointer;
@@ -203,10 +224,9 @@
 
   </div>
 
-  <div class="carousel-controls">
-    <span class="carousel-arrow" onclick="prevPoem()">←</span>
-    <span class="carousel-arrow" onclick="nextPoem()">→</span>
-  </div>
+<span class="carousel-arrow left" onclick="prevPoem()">←</span>
+<span class="carousel-arrow right" onclick="nextPoem()">→</span>
+
 </section>
   
 <footer>
