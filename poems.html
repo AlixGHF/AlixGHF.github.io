@@ -1,34 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Poems — AlixGHF</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>AlixGHF — Poetry Archive</title>
+  <meta name="description" content="Poetry by AlixGHF — exploring grief, nostalgia, memory, and loss.">
+  <meta name="author" content="AlixGHF">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google site verification (replace YOUR_CODE_HERE with actual code) -->
+  <meta name="google-site-verification" content="YOUR_CODE_HERE">
+
+  <style>
+    /* General page styles */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.7;
+      color: #111;
+      background: #fff;
+    }
+
+    a {
+      color: #111;
+      text-decoration: none;
+      border-bottom: 1px solid #ccc;
+    }
+
+    a:hover {
+      border-bottom: 1px solid #111;
+    }
+
+    h1, h2, h3 {
+      font-weight: normal;
+      margin-top: 1em;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    /* Collapsible sections */
+    .collapsible {
+      cursor: pointer;
+      user-select: none;
+      margin: 20px 0 10px;
+      padding: 5px 0;
+    }
+
+    .collapsible::after {
+      content: " ▼";
+      font-size: 0.9em;
+    }
+
+    .collapsible.collapsed::after {
+      content: " ▶";
+    }
+
+    .poem-list {
+      display: block;
+      margin-left: 20px;
+      transition: max-height 0.3s ease;
+    }
+
+    .poem-list.collapsed {
+      display: none;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ul li {
+      margin-bottom: 10px;
+    }
+
+    em {
+      font-style: italic;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <h1>Poetry Archive</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="poems.html">Poems</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-</header>
+  <h1>All Poems</h1>
 
-<main>
+  <!-- Current Poems Section -->
+  <section class="poem-section">
+    <h2 class="collapsible">Current Poems ▼</h2>
+    <div class="poem-list">
+      <ul>
+        <li><a href="poems/untitled.html">Untitled</a> — 16/06/2022</li>
+        <li><a href="poems/ghost.html">Ghost</a> — 15/07/2025</li>
+        <li><a href="poems/expired.html">Expired</a> — 14/07/2025</li>
+      </ul>
+    </div>
+  </section>
 
-<ul>
-  <li><a href="poems/untitled.html">Untitled</a> — 16/06/2022</li>
-  <li><a href="poems/ghost.html">Ghost</a> — 15/07/2025</li>
-  <li><a href="poems/expired.html">Expired</a> — 14/07/2025</li>
-</ul>
+  <!-- Early Works Section -->
+  <section class="poem-section">
+    <h2 class="collapsible">Early Works ▼</h2>
+    <div class="poem-list">
+      <p><em>A few poems from when I first started writing — imperfect, but part of my journey.</em></p>
+      <ul>
+        <li><a href="poems/early1.html">First Attempt</a> — 01/01/2020</li>
+        <li><a href="poems/early2.html">Beginnings</a> — 12/03/2020</li>
+      </ul>
+    </div>
+  </section>
 
-</main>
+  <!-- JavaScript for collapsible sections -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const headers = document.querySelectorAll(".collapsible");
 
-<footer>
-  &copy; 2026 AlixGHF. All rights reserved.
-</footer>
+      headers.forEach(header => {
+        header.addEventListener("click", () => {
+          const content = header.nextElementSibling;
+          content.classList.toggle("collapsed");
+          header.classList.toggle("collapsed");
+        });
+      });
+    });
+  </script>
 
 </body>
 </html>
