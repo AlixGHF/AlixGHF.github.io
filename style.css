@@ -51,16 +51,3 @@ footer {
   border-radius: 6px;
   margin-top: 25px;
 }
-
-
-<style>
-  a {
-    color: #111;       /* dark, neutral colour */
-    text-decoration: none; /* removes underline */
-  }
-
-  a:hover {
-    border-bottom: 1px solid #888; /* subtle hover effect */
-  }
-</style>
-
