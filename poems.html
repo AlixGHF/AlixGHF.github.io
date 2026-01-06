@@ -487,6 +487,18 @@ document.addEventListener("click", () => {
   });
 });
 
+
+  /* Close filter dropdown when clicking outside */
+document.addEventListener("click", function(e) {
+  const filtersDropdown = document.getElementById("filtersDropdown");
+  const filterToggle = document.querySelector(".filter-toggle");
+
+  // If the click is NOT inside the filters dropdown or the toggle button, close it
+  if (!filtersDropdown.contains(e.target) && !filterToggle.contains(e.target)) {
+    filtersDropdown.classList.remove("show");
+  }
+});
+
 });
 </script>
 
