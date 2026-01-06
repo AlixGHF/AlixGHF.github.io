@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* Collapsible headings */
+/* ---------------- COLLAPSIBLE SECTIONS ---------------- */
 .collapsible {
   cursor: pointer;
   user-select: none;
@@ -16,9 +16,7 @@
   color: #222;
 }
 .poem-list {
-  display: block;
   margin-left: 20px;
-  transition: max-height 0.3s ease;
 }
 .poem-list.collapsed {
   display: none;
@@ -26,7 +24,7 @@
 .collapsible::after { content: " ▼"; font-size: 0.9em; }
 .collapsible.collapsed::after { content: " ▶"; }
 
-/* Search + filter panel */
+/* ---------------- SEARCH + FILTER BAR ---------------- */
 .search-and-filters {
   position: absolute;
   top: 110px;
@@ -36,7 +34,12 @@
   gap: 10px;
   z-index: 1000;
 }
-/* Search bar */
+
+.search-box {
+  display: flex;
+  gap: 6px;
+}
+
 .search-bar {
   padding: 6px 8px;
   font-family: inherit;
@@ -45,7 +48,20 @@
   width: 180px;
   border-radius: 4px;
 }
-/* Filter toggle button */
+
+#searchButton {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* ---------------- FILTER DROPDOWN ---------------- */
+.filter-panel {
+  position: relative;
+}
+
 .filter-toggle {
   background: none;
   border: 1px solid #ccc;
@@ -54,65 +70,27 @@
   font-family: inherit;
   border-radius: 4px;
 }
-/* Filters dropdown */
+
 .filters {
   position: absolute;
   top: 36px;
   right: 0;
-  padding: 14px;
-  border: 1px solid #ddd;
+  width: 260px;
+  padding: 10px 0;
   background: #fafafa;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 250px;
+  border: 1px solid #ddd;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  display: none; /* initially hidden */
-  z-index: 1000;
+  display: none;
 }
+
 .filters.show {
-  display: flex;
+  display: block;
 }
 
-/* Theme section */
-.theme-filter {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.filter-label {
-  font-size: 0.85em;
-  color: #444;
-}
-.theme-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* 3 columns */
-  gap: 4px 10px;
-}
-.theme-options label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.85em;
-}
-
-/* Clear filters button */
-.clear-filters {
-  background: #eee;
-  border: 1px solid #ccc;
-  color: #555;
-  padding: 6px 10px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-.clear-filters:hover {
-  background: #e0e0e0;
-}
-
-
-/* ---------- FILTER MENU ITEMS ---------- */
+/* ---------------- FILTER ITEMS ---------------- */
 .filter-item {
   position: relative;
+  padding: 8px 12px;
   font-size: 0.9em;
   cursor: pointer;
 }
@@ -121,7 +99,7 @@
   background: #eee;
 }
 
-/* ---------- SUBMENUS (OPEN LEFT) ---------- */
+/* ---------------- SUBMENUS (OPEN LEFT) ---------------- */
 .submenu {
   position: absolute;
   top: 0;
@@ -138,13 +116,11 @@
   display: block;
 }
 
-/* Nested submenu spacing */
 .has-submenu {
   position: relative;
   padding: 6px 10px;
 }
 
-/* Submenu options */
 .submenu div,
 .submenu label {
   padding: 6px 10px;
@@ -157,28 +133,34 @@
   background: #f0f0f0;
 }
 
-/* Theme submenu width */
-.theme-submenu {
-  width: 260px;
+/* ---------------- THEMES GRID ---------------- */
+.theme-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px 10px;
 }
 
-
-  .search-box {
+.theme-options label {
   display: flex;
+  align-items: center;
   gap: 6px;
 }
 
-#searchButton {
+/* ---------------- CLEAR FILTERS ---------------- */
+.clear-filters {
+  margin: 10px;
   padding: 6px 10px;
   border: 1px solid #ccc;
   background: #eee;
   cursor: pointer;
   border-radius: 4px;
 }
-
-
+.clear-filters:hover {
+  background: #e0e0e0;
+}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -193,70 +175,75 @@
 
 <main>
 
-<!-- SEARCH AND FILTERS -->
-<div class="search-box">
-  <input type="text" id="searchFilter" placeholder="Search poems…" class="search-bar">
-  <button id="searchButton">Search</button>
-</div>
+<!-- SEARCH + FILTERS -->
+<div class="search-and-filters">
+
+  <div class="search-box">
+    <input type="text" id="searchFilter" placeholder="Search poems…" class="search-bar">
+    <button id="searchButton">Search</button>
+  </div>
 
   <div class="filter-panel">
     <button class="filter-toggle">Filters ▾</button>
+
     <div class="filters" id="filtersDropdown">
-<div class="filter-item">
-  Sort
-  <div class="submenu">
-    <div data-sort="author">Author’s Choice</div>
 
-    <div class="has-submenu">
-      Alphabetical
-      <div class="submenu">
-        <div data-sort="alpha">A → Z</div>
-        <div data-sort="alpha-reverse">Z → A</div>
-      </div>
-    </div>
+      <div class="filter-item">
+        Sort
+        <div class="submenu">
+          <div data-sort="author">Author’s Choice</div>
 
-    <div class="has-submenu">
-      Date
-      <div class="submenu">
-        <div data-sort="date-desc">Newest → Oldest</div>
-        <div data-sort="date-asc">Oldest → Newest</div>
-      </div>
-    </div>
-  </div>
-</div>
+          <div class="has-submenu">
+            Alphabetical
+            <div class="submenu">
+              <div data-sort="alpha">A → Z</div>
+              <div data-sort="alpha-reverse">Z → A</div>
+            </div>
+          </div>
 
-<div class="filter-item">
-  Voice
-  <div class="submenu">
-    <div data-voice="all">All</div>
-    <div data-voice="personal">Personal</div>
-    <div data-voice="persona">Persona</div>
-  </div>
-</div>
-
-<div class="filter-item">
-  Themes
-  <div class="submenu theme-submenu">
-    <div class="theme-options">
-      <label><input type="checkbox" value="grief"> Grief</label>
-      <label><input type="checkbox" value="loss"> Loss</label>
-      <label><input type="checkbox" value="love"> Love</label>
-      <label><input type="checkbox" value="memory"> Memory</label>
-      <label><input type="checkbox" value="nostalgia"> Nostalgia</label>
-      <label><input type="checkbox" value="heartbreak"> Heartbreak</label>
-      <label><input type="checkbox" value="longing"> Longing</label>
-    </div>
-  </div>
-</div>
-
+          <div class="has-submenu">
+            Date
+            <div class="submenu">
+              <div data-sort="date-desc">Newest → Oldest</div>
+              <div data-sort="date-asc">Oldest → Newest</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <button type="button" id="clearFilters" class="clear-filters">Clear filters</button>
+      <div class="filter-item">
+        Voice
+        <div class="submenu">
+          <div data-voice="all">All</div>
+          <div data-voice="personal">Personal</div>
+          <div data-voice="persona">Persona</div>
+        </div>
+      </div>
+
+      <div class="filter-item">
+        Themes
+        <div class="submenu">
+          <div class="theme-options">
+            <label><input type="checkbox" value="grief"> Grief</label>
+            <label><input type="checkbox" value="loss"> Loss</label>
+            <label><input type="checkbox" value="love"> Love</label>
+            <label><input type="checkbox" value="memory"> Memory</label>
+            <label><input type="checkbox" value="nostalgia"> Nostalgia</label>
+            <label><input type="checkbox" value="heartbreak"> Heartbreak</label>
+            <label><input type="checkbox" value="longing"> Longing</label>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" id="clearFilters" class="clear-filters">
+        Clear filters
+      </button>
+
     </div>
   </div>
 </div>
 
-<!-- POEMS -->
+<!-- POEMS (UNCHANGED) -->
 <section class="poem-section">
   <h2 class="collapsible">Poems</h2>
   <div class="poem-list">
@@ -322,24 +309,20 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-  /* Collapsible poem sections */
   document.querySelectorAll(".collapsible").forEach(header => {
     header.addEventListener("click", () => {
-      const content = header.parentElement.querySelector(".poem-list");
-      content.classList.toggle("collapsed");
       header.classList.toggle("collapsed");
+      header.parentElement.querySelector(".poem-list").classList.toggle("collapsed");
     });
   });
 
-  /* Filter dropdown toggle */
   const filterToggle = document.querySelector(".filter-toggle");
   const filtersDropdown = document.getElementById("filtersDropdown");
 
-  filterToggle.addEventListener("click", () => {
+  filterToggle.onclick = () => {
     filtersDropdown.classList.toggle("show");
-  });
+  };
 
-  /* Core state */
   let sortValue = "author";
   let voiceValue = "all";
   let searchValue = "";
@@ -352,40 +335,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const originalOrder = [...poemLists].map(ul => [...ul.children]);
 
-  /* Hover menu handlers */
   document.querySelectorAll("[data-sort]").forEach(el => {
-    el.addEventListener("click", () => {
-      sortValue = el.dataset.sort;
-      applyFilters();
-    });
+    el.onclick = () => { sortValue = el.dataset.sort; applyFilters(); };
   });
 
   document.querySelectorAll("[data-voice]").forEach(el => {
-    el.addEventListener("click", () => {
-      voiceValue = el.dataset.voice;
-      applyFilters();
-    });
+    el.onclick = () => { voiceValue = el.dataset.voice; applyFilters(); };
   });
 
-  /* Search button */
-  searchButton.addEventListener("click", () => {
+  searchButton.onclick = () => {
     searchValue = searchInput.value.toLowerCase();
     applyFilters();
-  });
+  };
 
-  themeCheckboxes.forEach(cb => cb.addEventListener("change", applyFilters));
+  themeCheckboxes.forEach(cb => cb.onchange = applyFilters);
 
   function applyFilters() {
-    const selectedThemes = [...themeCheckboxes]
-      .filter(cb => cb.checked)
-      .map(cb => cb.value);
+    const selectedThemes = [...themeCheckboxes].filter(cb => cb.checked).map(cb => cb.value);
 
     poemLists.forEach((ul, index) => {
       let poems = [...ul.children];
 
       poems.forEach(li => {
         let visible = true;
-        const themes = (li.dataset.theme || "").toLowerCase();
+        const themes = li.dataset.theme || "";
 
         if (voiceValue !== "all" && li.dataset.voice !== voiceValue) visible = false;
         if (searchValue && !li.textContent.toLowerCase().includes(searchValue)) visible = false;
@@ -411,19 +384,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  /* Clear filters */
-  clearFilters.addEventListener("click", () => {
+  clearFilters.onclick = () => {
     sortValue = "author";
     voiceValue = "all";
     searchValue = "";
     searchInput.value = "";
     themeCheckboxes.forEach(cb => cb.checked = false);
     applyFilters();
-  });
+  };
 
 });
 </script>
-
 
 </body>
 </html>
