@@ -170,6 +170,12 @@
   background: #f3f3f0;
 }
 
+
+  /* Enable tap-to-open submenus */
+.has-submenu.open > .submenu {
+  display: block;
+}
+
 /* ---------------- THEMES GRID ---------------- */
 .theme-options {
   display: grid;
@@ -188,6 +194,40 @@
 .theme-options input {
   accent-color: #555;
 }
+
+
+  /* ---------------- MOBILE READABILITY + TAP TARGETS ---------------- */
+
+/* Main filter items */
+.filter-item {
+  font-size: 1.05em;          /* bigger text */
+  line-height: 1.4;
+  padding: 14px 18px;         /* larger tap area */
+}
+
+/* Submenu items */
+.submenu div,
+.submenu label {
+  font-size: 1em;
+  padding: 14px 18px;         /* finger-friendly */
+}
+
+/* Theme labels */
+.theme-options label {
+  font-size: 0.95em;
+}
+
+/* Slightly larger checkbox for touch */
+.theme-options input {
+  transform: scale(1.2);
+}
+
+/* Prevent iOS zoom-on-focus */
+input,
+button {
+  font-size: 16px;
+}
+
 </style>
 </head>
 
@@ -421,6 +461,31 @@ document.addEventListener("DOMContentLoaded", function () {
     themeCheckboxes.forEach(cb => cb.checked = false);
     applyFilters();
   };
+
+
+  /* iOS / touch support for hover menus */
+document.querySelectorAll(".has-submenu").forEach(item => {
+  item.addEventListener("click", e => {
+    e.stopPropagation();
+
+    // Close other open submenus
+    document.querySelectorAll(".has-submenu").forEach(other => {
+      if (other !== item) {
+        other.classList.remove("open");
+      }
+    });
+
+    // Toggle this one
+    item.classList.toggle("open");
+  });
+});
+
+// Close menus when tapping outside
+document.addEventListener("click", () => {
+  document.querySelectorAll(".has-submenu").forEach(item => {
+    item.classList.remove("open");
+  });
+});
 
 });
 </script>
