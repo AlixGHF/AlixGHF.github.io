@@ -61,6 +61,49 @@
   font-family: inherit;
 }
 
+
+    /* Theme dropdown */
+.theme-filter {
+  position: relative;
+}
+
+.theme-toggle {
+  padding: 5px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.theme-options {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.theme-options.collapsed {
+  display: none;
+}
+
+/* Search bar spacing */
+#searchFilter {
+  padding: 5px;
+  font-family: inherit;
+}
+
+/* Clear filters — subtle */
+.clear-filters {
+  background: #eee;
+  border: 1px solid #ccc;
+  color: #555;
+  padding: 6px 10px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.clear-filters:hover {
+  background: #e0e0e0;
+}
+
   </style>
 </head>
 <body>
@@ -101,14 +144,32 @@
     </label>
 
     <label>
-      Theme:
-      <input type="text" id="themeFilter" placeholder="e.g. grief, love">
-    </label>
+  Search:
+  <input type="text" id="searchFilter" placeholder="Search by title, date, theme…">
+</label>
+
+<button type="button" id="clearFilters" class="clear-filters">
+  Clear filters
+</button>
+
+<div class="theme-filter">
+  <button type="button" class="theme-toggle">
+    Themes ▾
+  </button>
+
+  <div class="theme-options collapsed">
+    <label><input type="checkbox" value="grief"> Grief</label>
+    <label><input type="checkbox" value="loss"> Loss</label>
+    <label><input type="checkbox" value="love"> Love</label>
+    <label><input type="checkbox" value="memory"> Memory</label>
+    <label><input type="checkbox" value="nostalgia"> Nostalgia</label>
+    <label><input type="checkbox" value="heartbreak"> Heartbreak</label>
+    <label><input type="checkbox" value="longing"> Longing</label>
+  </div>
+</div>
+
   </section>
 
-  
-
-  
   
 <section class="poem-section">
   <h2 class="collapsible">Poems</h2>
@@ -271,8 +332,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
+<script>
 document.addEventListener("DOMContentLoaded", function () {
   const poemLists = document.querySelectorAll(".poem-list ul");
+  const themeCheckboxes = document.querySelectorAll(".theme-options input");
+  const searchInput = document.getElementById("searchFilter");
+
   let originalOrder = [];
 
   poemLists.forEach(ul => {
@@ -282,18 +347,32 @@ document.addEventListener("DOMContentLoaded", function () {
   function applyFilters() {
     const sortValue = document.getElementById("sortSelect").value;
     const voiceValue = document.getElementById("voiceFilter").value;
-    const themeValue = document.getElementById("themeFilter").value.toLowerCase();
+    const searchValue = searchInput.value.toLowerCase();
+
+    const selectedThemes = [...themeCheckboxes]
+      .filter(cb => cb.checked)
+      .map(cb => cb.value);
 
     poemLists.forEach((ul, index) => {
       let poems = [...ul.children];
 
       poems.forEach(li => {
+        const text = li.textContent.toLowerCase();
+        const themes = (li.dataset.theme || "").toLowerCase();
         const voice = li.dataset.voice || "";
-        const theme = li.dataset.theme || "";
+
         let visible = true;
 
         if (voiceValue !== "all" && voice !== voiceValue) visible = false;
-        if (themeValue && !theme.includes(themeValue)) visible = false;
+
+        if (selectedThemes.length &&
+            !selectedThemes.some(t => themes.includes(t))) {
+          visible = false;
+        }
+
+        if (searchValue && !text.includes(searchValue)) {
+          visible = false;
+        }
 
         li.style.display = visible ? "" : "none";
       });
@@ -336,8 +415,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("sortSelect").addEventListener("change", applyFilters);
   document.getElementById("voiceFilter").addEventListener("change", applyFilters);
-  document.getElementById("themeFilter").addEventListener("input", applyFilters);
+  themeCheckboxes.forEach(cb => cb.addEventListener("change", applyFilters));
+  searchInput.addEventListener("input", applyFilters);
+
+  document.getElementById("clearFilters").addEventListener("click", () => {
+    document.getElementById("sortSelect").value = "author";
+    document.getElementById("voiceFilter").value = "all";
+    searchInput.value = "";
+    themeCheckboxes.forEach(cb => cb.checked = false);
+    applyFilters();
+  });
+
+  document.querySelector(".theme-toggle").addEventListener("click", () => {
+    document.querySelector(".theme-options").classList.toggle("collapsed");
+  });
 });
+</script>
+
 
 </script>
 
