@@ -31,7 +31,7 @@
   right: 40px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   z-index: 1000;
 }
 
@@ -41,20 +41,21 @@
 }
 
 .search-bar {
-  padding: 7px 10px;
+  padding: 8px 10px;
   font-family: inherit;
   font-size: 0.9em;
-  border: 1px solid #ccc;
+  border: 1px solid #d4d4d4;
   width: 180px;
-  border-radius: 6px;
+  border-radius: 8px;
+  background: #fff;
 }
 
 #searchButton {
-  padding: 7px 12px;
-  border: 1px solid #ccc;
-  background: #f2f2f2;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d4d4d4;
+  background: #f3f3f3;
   cursor: pointer;
-  border-radius: 6px;
 }
 
 /* ---------------- FILTER CONTROLS ---------------- */
@@ -65,16 +66,22 @@
 }
 
 .filter-toggle {
-  background: #f7f7f7;
-  border: 1px solid #ccc;
-  padding: 7px 12px;
-  cursor: pointer;
+  padding: 8px 14px;
   font-family: inherit;
-  border-radius: 6px;
+  font-size: 0.9em;
+  border-radius: 999px;
+  border: 1px solid #d4d4d4;
+  background: #fafafa;
+  cursor: pointer;
 }
 
-.filter-toggle:hover {
-  background: #ededed;
+.clear-filters {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid #d4d4d4;
+  background: #f6f6f6;
+  cursor: pointer;
+  color: #555;
 }
 
 /* ---------------- CLEAR FILTERS (OUTSIDE) ---------------- */
@@ -93,14 +100,14 @@
 /* ---------------- FILTER DROPDOWN ---------------- */
 .filters {
   position: absolute;
-  top: 42px;
+  top: 46px;
   right: 0;
-  width: 270px;
-  padding: 8px 0;
-  background: #fbfbfb;
+  width: 260px;
+  background: #fdfdfc;
   border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  padding: 6px 0;
   display: none;
 }
 
@@ -110,15 +117,15 @@
 
 /* ---------------- FILTER ITEMS ---------------- */
 .filter-item {
-  position: relative;
-  padding: 10px 14px;
+  padding: 10px 16px;
   font-size: 0.9em;
-  cursor: pointer;
   color: #333;
+  cursor: pointer;
+  position: relative;
 }
 
 .filter-item:hover {
-  background: #f1f1f1;
+  background: #f1f1ee;
 }
 
 /* ---------------- SUBMENUS (OPEN LEFT) ---------------- */
@@ -146,22 +153,27 @@
 }
 
 /* ---------------- SUBMENU ITEMS ---------------- */
+.filter-item:hover > .submenu,
+.has-submenu:hover > .submenu {
+  display: block;
+}
+
 .submenu div,
 .submenu label {
-  padding: 8px 12px;
+  padding: 8px 14px;
   font-size: 0.85em;
-  white-space: nowrap;
+  cursor: pointer;
 }
 
 .submenu div:hover,
 .submenu label:hover {
-  background: #f3f3f3;
+  background: #f3f3f0;
 }
 
 /* ---------------- THEMES GRID ---------------- */
 .theme-options {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 6px 12px;
   padding: 6px;
 }
@@ -201,61 +213,63 @@
     <button id="searchButton">Search</button>
   </div>
 
-  <div class="filter-panel">
-    <button class="filter-toggle">Filters ▾</button>
-    <button type="button" id="clearFilters" class="clear-filters">Clear</button>
+<div class="filter-panel">
+  <button class="filter-toggle">Filters ▾</button>
+  <button id="clearFilters" class="clear-filters">Clear</button>
 
-    <div class="filters" id="filtersDropdown">
+  <div class="filters" id="filtersDropdown">
 
-      <div class="filter-item">
-        Sort
-        <div class="submenu">
-          <div data-sort="author">Author’s Choice</div>
+    <div class="filter-item">
+      Sort by
+      <div class="submenu">
 
-          <div class="has-submenu">
-            Alphabetical
-            <div class="submenu">
-              <div data-sort="alpha">A → Z</div>
-              <div data-sort="alpha-reverse">Z → A</div>
+        <div data-sort="author">Author’s Choice</div>
+
+        <div class="has-submenu">
+          Alphabetical
+          <div class="submenu">
+            <div data-sort="alpha">A → Z</div>
+            <div data-sort="alpha-reverse">Z → A</div>
+          </div>
+        </div>
+
+        <div class="has-submenu">
+          Date
+          <div class="submenu">
+            <div data-sort="date-desc">Newest → Oldest</div>
+            <div data-sort="date-asc">Oldest → Newest</div>
+          </div>
+        </div>
+
+        <div class="has-submenu">
+          Voice
+          <div class="submenu">
+            <div data-voice="all">All</div>
+            <div data-voice="personal">Personal</div>
+            <div data-voice="persona">Persona</div>
+          </div>
+        </div>
+
+        <div class="has-submenu">
+          Themes
+          <div class="submenu">
+            <div class="theme-options">
+              <label><input type="checkbox" value="grief"> Grief</label>
+              <label><input type="checkbox" value="loss"> Loss</label>
+              <label><input type="checkbox" value="love"> Love</label>
+              <label><input type="checkbox" value="memory"> Memory</label>
+              <label><input type="checkbox" value="nostalgia"> Nostalgia</label>
+              <label><input type="checkbox" value="heartbreak"> Heartbreak</label>
+              <label><input type="checkbox" value="longing"> Longing</label>
             </div>
           </div>
-
-          <div class="has-submenu">
-            Date
-            <div class="submenu">
-              <div data-sort="date-desc">Newest → Oldest</div>
-              <div data-sort="date-asc">Oldest → Newest</div>
-            </div>
-          </div>
         </div>
-      </div>
 
-      <div class="filter-item">
-        Voice
-        <div class="submenu">
-          <div data-voice="all">All</div>
-          <div data-voice="personal">Personal</div>
-          <div data-voice="persona">Persona</div>
-        </div>
       </div>
-
-      <div class="filter-item">
-        Themes
-        <div class="submenu">
-          <div class="theme-options">
-            <label><input type="checkbox" value="grief"> Grief</label>
-            <label><input type="checkbox" value="loss"> Loss</label>
-            <label><input type="checkbox" value="love"> Love</label>
-            <label><input type="checkbox" value="memory"> Memory</label>
-            <label><input type="checkbox" value="nostalgia"> Nostalgia</label>
-            <label><input type="checkbox" value="heartbreak"> Heartbreak</label>
-            <label><input type="checkbox" value="longing"> Longing</label>
-          </div>
-        </div>
-      </div>
-
     </div>
+
   </div>
+</div>
 </div>
 
 <!-- POEMS -->
