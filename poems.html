@@ -108,6 +108,60 @@
 .clear-filters:hover {
   background: #e0e0e0;
 }
+
+
+/* ---------- FILTER MENU ITEMS ---------- */
+.filter-item {
+  position: relative;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.filter-item:hover {
+  background: #eee;
+}
+
+/* ---------- SUBMENUS (OPEN LEFT) ---------- */
+.submenu {
+  position: absolute;
+  top: 0;
+  right: 100%;
+  background: #fff;
+  border: 1px solid #ddd;
+  min-width: 200px;
+  display: none;
+  z-index: 1001;
+}
+
+.filter-item:hover > .submenu,
+.has-submenu:hover > .submenu {
+  display: block;
+}
+
+/* Nested submenu spacing */
+.has-submenu {
+  position: relative;
+  padding: 6px 10px;
+}
+
+/* Submenu options */
+.submenu div,
+.submenu label {
+  padding: 6px 10px;
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.submenu div:hover,
+.submenu label:hover {
+  background: #f0f0f0;
+}
+
+/* Theme submenu width */
+.theme-submenu {
+  width: 260px;
+}
+
 </style>
 </head>
 <body>
@@ -131,37 +185,53 @@
   <div class="filter-panel">
     <button class="filter-toggle">Filters ▾</button>
     <div class="filters" id="filtersDropdown">
-      <label>
-        Sort by:
-        <select id="sortSelect">
-          <option value="author">Author’s Choice</option>
-          <option value="date-desc">Newest → Oldest</option>
-          <option value="date-asc">Oldest → Newest</option>
-          <option value="alpha">A → Z</option>
-          <option value="alpha-reverse">Z → A</option>
-        </select>
-      </label>
+<div class="filter-item">
+  Sort
+  <div class="submenu">
+    <div data-sort="author">Author’s Choice</div>
 
-      <label>
-        Voice:
-        <select id="voiceFilter">
-          <option value="all">All</option>
-          <option value="personal">Personal</option>
-          <option value="persona">Persona</option>
-        </select>
-      </label>
+    <div class="has-submenu">
+      Alphabetical
+      <div class="submenu">
+        <div data-sort="alpha">A → Z</div>
+        <div data-sort="alpha-reverse">Z → A</div>
+      </div>
+    </div>
 
-      <div class="theme-filter">
-        <span class="filter-label">Themes</span>
-        <div class="theme-options">
-          <label><input type="checkbox" value="grief"> Grief</label>
-          <label><input type="checkbox" value="loss"> Loss</label>
-          <label><input type="checkbox" value="love"> Love</label>
-          <label><input type="checkbox" value="memory"> Memory</label>
-          <label><input type="checkbox" value="nostalgia"> Nostalgia</label>
-          <label><input type="checkbox" value="heartbreak"> Heartbreak</label>
-          <label><input type="checkbox" value="longing"> Longing</label>
-        </div>
+    <div class="has-submenu">
+      Date
+      <div class="submenu">
+        <div data-sort="date-desc">Newest → Oldest</div>
+        <div data-sort="date-asc">Oldest → Newest</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="filter-item">
+  Voice
+  <div class="submenu">
+    <div data-voice="all">All</div>
+    <div data-voice="personal">Personal</div>
+    <div data-voice="persona">Persona</div>
+  </div>
+</div>
+
+<div class="filter-item">
+  Themes
+  <div class="submenu theme-submenu">
+    <div class="theme-options">
+      <label><input type="checkbox" value="grief"> Grief</label>
+      <label><input type="checkbox" value="loss"> Loss</label>
+      <label><input type="checkbox" value="love"> Love</label>
+      <label><input type="checkbox" value="memory"> Memory</label>
+      <label><input type="checkbox" value="nostalgia"> Nostalgia</label>
+      <label><input type="checkbox" value="heartbreak"> Heartbreak</label>
+      <label><input type="checkbox" value="longing"> Longing</label>
+    </div>
+  </div>
+</div>
+
       </div>
 
       <button type="button" id="clearFilters" class="clear-filters">Clear filters</button>
@@ -255,15 +325,36 @@ document.addEventListener("DOMContentLoaded", function () {
   const poemLists = document.querySelectorAll(".poem-list ul");
   const themeCheckboxes = document.querySelectorAll(".theme-options input");
   const searchInput = document.getElementById("searchFilter");
-  const sortSelect = document.getElementById("sortSelect");
-  const voiceFilter = document.getElementById("voiceFilter");
   const clearFilters = document.getElementById("clearFilters");
 
   const originalOrder = [...poemLists].map(ul => [...ul.children]);
 
+
+  let sortValue = "author";
+  let voiceValue = "all";
+
+  document.querySelectorAll("[data-sort]").forEach(el => {
+    el.addEventListener("click", () => {
+      sortValue = el.dataset.sort;
+      applyFilters();
+    });
+  });
+
+  document.querySelectorAll("[data-voice]").forEach(el => {
+    el.addEventListener("click", () => {
+      voiceValue = el.dataset.voice;
+      applyFilters();
+    });
+  });
+
+  
+  
   function applyFilters() {
-    const sortValue = sortSelect.value;
-    const voiceValue = voiceFilter.value;
+const searchValue = searchInput.value.toLowerCase();
+const selectedThemes = [...themeCheckboxes]
+  .filter(cb => cb.checked)
+  .map(cb => cb.value);
+
     const searchValue = searchInput.value.toLowerCase();
     const selectedThemes = [...themeCheckboxes].filter(cb => cb.checked).map(cb => cb.value);
 
@@ -295,8 +386,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  sortSelect.onchange = applyFilters;
-  voiceFilter.onchange = applyFilters;
   searchInput.oninput = applyFilters;
   themeCheckboxes.forEach(cb => cb.onchange = applyFilters);
 
