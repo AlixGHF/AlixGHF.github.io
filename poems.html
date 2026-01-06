@@ -39,6 +39,28 @@
   content: " ▶";
 }
 
+
+    
+    .filters {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  font-size: 0.95em;
+}
+
+.filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filters select,
+.filters input {
+  padding: 5px;
+  font-family: inherit;
+}
+
   </style>
 </head>
 <body>
@@ -55,17 +77,98 @@
 
 <main>
 
+
+  <!-- FILTER CONTROLS -->
+  <section class="filters">
+    <label>
+      Sort by:
+      <select id="sortSelect">
+        <option value="author">Author’s Choice</option>
+        <option value="date-desc">Newest → Oldest</option>
+        <option value="date-asc">Oldest → Newest</option>
+        <option value="alpha">Alphabetical</option>
+        <option value="intensity">Emotional Intensity</option>
+      </select>
+    </label>
+
+    <label>
+      Voice:
+      <select id="voiceFilter">
+        <option value="all">All</option>
+        <option value="personal">Personal</option>
+        <option value="persona">Persona</option>
+      </select>
+    </label>
+
+    <label>
+      Theme:
+      <input type="text" id="themeFilter" placeholder="e.g. grief, love">
+    </label>
+  </section>
+
+  
+
+  
+  
 <section class="poem-section">
   <h2 class="collapsible">Poems</h2>
   <div class="poem-list">
-    <ul>
-      <li><a href="poems/untitled.html">Untitled</a> — 16/06/2022</li>
-      <li><a href="poems/ghost.html">Ghost</a> — 15/07/2025</li>
-      <li><a href="poems/expired.html">Expired</a> — 14/07/2025</li>
-      <li><a href="poems/yours.html">Yours</a> — 16/06/2025</li>
-      <li><a href="poems/us.html">Us.</a> — 14/06/2025</li>      
-      <li><a href="poems/silence.html">Silence</a> — 21/06/2025</li>      
-    </ul>
+<ul>
+  <li
+    data-theme="grief loss memory nostalgia"
+    data-date="2022-06-16"
+    data-voice="personal"
+    data-intensity="5"
+  >
+    <a href="poems/untitled.html">Untitled</a> — 16/06/2022
+  </li>
+
+  <li
+    data-theme="loss grief memory nostalgia parents"
+    data-date="2025-07-15"
+    data-voice="personal"
+    data-intensity="5"
+  >
+    <a href="poems/ghost.html">Ghost</a> — 15/07/2025
+  </li>
+
+  <li
+    data-theme="love loss grief nostalgia emotional decay"
+    data-date="2025-07-14"
+    data-voice="persona"
+    data-intensity="4"
+  >
+    <a href="poems/expired.html">Expired</a> — 14/07/2025
+  </li>
+
+  <li
+    data-theme="romantic longing love unsaid thoughts"
+    data-date="2025-06-16"
+    data-voice="persona"
+    data-intensity="2"
+  >
+    <a href="poems/yours.html">Yours</a> — 16/06/2025
+  </li>
+
+  <li
+    data-theme="breakup heartbreak romantic decay toxic love"
+    data-date="2025-06-14"
+    data-voice="persona"
+    data-intensity="3"
+  >
+    <a href="poems/us.html">Us.</a> — 14/06/2025
+  </li>
+
+  <li
+    data-theme="emotional distance love loss silence longing"
+    data-date="2025-06-21"
+    data-voice="personal"
+    data-intensity="4"
+  >
+    <a href="poems/silence.html">Silence</a> — 21/06/2025
+  </li>
+</ul>
+
   </div>
 </section>
 
@@ -75,15 +178,71 @@
   <p><em>A few poems from when I first started writing — imperfect, but a part of my journey.</em></p>
 
   <div class="poem-list">
-    <ul>
-      <li><a href="poems/untitled2.html">Untitled.</a> — 04/07/2022</li>
-      <li><a href="poems/untitled3.html">Untitled.</a> — 22/07/2022</li>  
-      <li><a href="poems/untitled4.html">Untitled.</a> — 22/06/2022</li>
-      <li><a href="poems/anemptyslate.html">An Empty Slate.</a> — 23/06/2022</li>
-      <li><a href="poems/untitled5.html">Untitled.</a> — 05/06/2022</li>
-      <li><a href="poems/untitled6.html">Untitled.</a> — 29/08/2022</li>
-      <li><a href="poems/untitled7.html">Untitled.</a> — 09/07/2022</li>
-    </ul>
+<ul>
+  <li
+    data-theme="quiet heartbreak love loss unspoken pain"
+    data-date="2022-07-04"
+    data-voice="persona"
+    data-intensity="3"
+  >
+    <a href="poems/untitled2.html">Untitled.</a> — 04/07/2022
+  </li>
+
+  <li
+    data-theme="quiet heartbreak love loss unspoken pain"
+    data-date="2022-07-22"
+    data-voice="persona"
+    data-intensity="3"
+  >
+    <a href="poems/untitled3.html">Untitled.</a> — 22/07/2022
+  </li>
+
+  <li
+    data-theme="quiet heartbreak toxic love unspoken pain"
+    data-date="2022-06-22"
+    data-voice="persona"
+    data-intensity="4"
+  >
+    <a href="poems/untitled4.html">Untitled.</a> — 22/06/2022
+  </li>
+
+  <li
+    data-theme="quiet heartbreak love loss second chances"
+    data-date="2022-06-23"
+    data-voice="persona"
+    data-intensity="3"
+  >
+    <a href="poems/anemptyslate.html">An Empty Slate.</a> — 23/06/2022
+  </li>
+
+  <li
+    data-theme="quiet heartbreak love loss unspoken pain"
+    data-date="2022-06-05"
+    data-voice="persona"
+    data-intensity="2"
+  >
+    <a href="poems/untitled5.html">Untitled.</a> — 05/06/2022
+  </li>
+
+  <li
+    data-theme="quiet heartbreak regret emotional betrayal"
+    data-date="2022-08-29"
+    data-voice="persona"
+    data-intensity="3"
+  >
+    <a href="poems/untitled6.html">Untitled.</a> — 29/08/2022
+  </li>
+
+  <li
+    data-theme="quiet heartbreak love loss emotional despair"
+    data-date="2022-07-09"
+    data-voice="persona"
+    data-intensity="5"
+  >
+    <a href="poems/untitled7.html">Untitled.</a> — 09/07/2022
+  </li>
+</ul>
+
   </div>
 </section>
 
@@ -109,6 +268,77 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
 });
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const poemLists = document.querySelectorAll(".poem-list ul");
+  let originalOrder = [];
+
+  poemLists.forEach(ul => {
+    originalOrder.push([...ul.children]);
+  });
+
+  function applyFilters() {
+    const sortValue = document.getElementById("sortSelect").value;
+    const voiceValue = document.getElementById("voiceFilter").value;
+    const themeValue = document.getElementById("themeFilter").value.toLowerCase();
+
+    poemLists.forEach((ul, index) => {
+      let poems = [...ul.children];
+
+      poems.forEach(li => {
+        const voice = li.dataset.voice || "";
+        const theme = li.dataset.theme || "";
+        let visible = true;
+
+        if (voiceValue !== "all" && voice !== voiceValue) visible = false;
+        if (themeValue && !theme.includes(themeValue)) visible = false;
+
+        li.style.display = visible ? "" : "none";
+      });
+
+      let visiblePoems = poems.filter(li => li.style.display !== "none");
+
+      if (sortValue === "author") {
+        ul.innerHTML = "";
+        originalOrder[index].forEach(li => ul.appendChild(li));
+        return;
+      }
+
+      if (sortValue === "alpha") {
+        visiblePoems.sort((a, b) =>
+          a.textContent.localeCompare(b.textContent)
+        );
+      }
+
+      if (sortValue === "date-desc") {
+        visiblePoems.sort((a, b) =>
+          new Date(b.dataset.date) - new Date(a.dataset.date)
+        );
+      }
+
+      if (sortValue === "date-asc") {
+        visiblePoems.sort((a, b) =>
+          new Date(a.dataset.date) - new Date(b.dataset.date)
+        );
+      }
+
+      if (sortValue === "intensity") {
+        visiblePoems.sort((a, b) =>
+          (b.dataset.intensity || 0) - (a.dataset.intensity || 0)
+        );
+      }
+
+      visiblePoems.forEach(li => ul.appendChild(li));
+    });
+  }
+
+  document.getElementById("sortSelect").addEventListener("change", applyFilters);
+  document.getElementById("voiceFilter").addEventListener("change", applyFilters);
+  document.getElementById("themeFilter").addEventListener("input", applyFilters);
+});
+
 </script>
 
 
