@@ -162,6 +162,21 @@
   width: 260px;
 }
 
+
+  .search-box {
+  display: flex;
+  gap: 6px;
+}
+
+#searchButton {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+
 </style>
 </head>
 <body>
@@ -179,8 +194,10 @@
 <main>
 
 <!-- SEARCH AND FILTERS -->
-<div class="search-and-filters">
+<div class="search-box">
   <input type="text" id="searchFilter" placeholder="Search poems…" class="search-bar">
+  <button id="searchButton">Search</button>
+</div>
 
   <div class="filter-panel">
     <button class="filter-toggle">Filters ▾</button>
@@ -314,25 +331,28 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  /* Toggle filter dropdown */
+  /* Filter dropdown toggle */
   const filterToggle = document.querySelector(".filter-toggle");
   const filtersDropdown = document.getElementById("filtersDropdown");
+
   filterToggle.addEventListener("click", () => {
     filtersDropdown.classList.toggle("show");
   });
 
-  /* Filtering logic */
+  /* Core state */
+  let sortValue = "author";
+  let voiceValue = "all";
+  let searchValue = "";
+
   const poemLists = document.querySelectorAll(".poem-list ul");
   const themeCheckboxes = document.querySelectorAll(".theme-options input");
   const searchInput = document.getElementById("searchFilter");
+  const searchButton = document.getElementById("searchButton");
   const clearFilters = document.getElementById("clearFilters");
 
   const originalOrder = [...poemLists].map(ul => [...ul.children]);
 
-
-  let sortValue = "author";
-  let voiceValue = "all";
-
+  /* Hover menu handlers */
   document.querySelectorAll("[data-sort]").forEach(el => {
     el.addEventListener("click", () => {
       sortValue = el.dataset.sort;
@@ -347,16 +367,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  
-  
-  function applyFilters() {
-const searchValue = searchInput.value.toLowerCase();
-const selectedThemes = [...themeCheckboxes]
-  .filter(cb => cb.checked)
-  .map(cb => cb.value);
+  /* Search button */
+  searchButton.addEventListener("click", () => {
+    searchValue = searchInput.value.toLowerCase();
+    applyFilters();
+  });
 
-    const searchValue = searchInput.value.toLowerCase();
-    const selectedThemes = [...themeCheckboxes].filter(cb => cb.checked).map(cb => cb.value);
+  themeCheckboxes.forEach(cb => cb.addEventListener("change", applyFilters));
+
+  function applyFilters() {
+    const selectedThemes = [...themeCheckboxes]
+      .filter(cb => cb.checked)
+      .map(cb => cb.value);
 
     poemLists.forEach((ul, index) => {
       let poems = [...ul.children];
@@ -364,9 +386,11 @@ const selectedThemes = [...themeCheckboxes]
       poems.forEach(li => {
         let visible = true;
         const themes = (li.dataset.theme || "").toLowerCase();
+
         if (voiceValue !== "all" && li.dataset.voice !== voiceValue) visible = false;
         if (searchValue && !li.textContent.toLowerCase().includes(searchValue)) visible = false;
         if (selectedThemes.length && !selectedThemes.some(t => themes.includes(t))) visible = false;
+
         li.style.display = visible ? "" : "none";
       });
 
@@ -377,6 +401,7 @@ const selectedThemes = [...themeCheckboxes]
         originalOrder[index].forEach(li => ul.appendChild(li));
         return;
       }
+
       if (sortValue === "alpha") visiblePoems.sort((a,b) => a.textContent.localeCompare(b.textContent));
       if (sortValue === "alpha-reverse") visiblePoems.sort((a,b) => b.textContent.localeCompare(a.textContent));
       if (sortValue === "date-desc") visiblePoems.sort((a,b) => new Date(b.dataset.date) - new Date(a.dataset.date));
@@ -386,19 +411,19 @@ const selectedThemes = [...themeCheckboxes]
     });
   }
 
-  searchInput.oninput = applyFilters;
-  themeCheckboxes.forEach(cb => cb.onchange = applyFilters);
-
   /* Clear filters */
-  clearFilters.onclick = () => {
-    sortSelect.value = "author";
-    voiceFilter.value = "all";
+  clearFilters.addEventListener("click", () => {
+    sortValue = "author";
+    voiceValue = "all";
+    searchValue = "";
     searchInput.value = "";
     themeCheckboxes.forEach(cb => cb.checked = false);
     applyFilters();
-  };
+  });
+
 });
 </script>
+
 
 </body>
 </html>
