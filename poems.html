@@ -5,166 +5,184 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* Collapsible headings */
+/* ---------- GENERAL ---------- */
 .collapsible {
   cursor: pointer;
-  user-select: none;
   margin: 20px 0 10px;
-  padding: 5px 0;
   font-weight: 400;
   font-size: 1.3em;
-  color: #222;
 }
-.poem-list {
-  display: block;
-  margin-left: 20px;
-  transition: max-height 0.3s ease;
-}
-.poem-list.collapsed {
-  display: none;
-}
-.collapsible::after { content: " ▼"; font-size: 0.9em; }
+.collapsible::after { content: " ▼"; }
 .collapsible.collapsed::after { content: " ▶"; }
 
-/* Search + filter panel */
+.poem-list.collapsed { display: none; }
+
+/* ---------- SEARCH + FILTER BAR ---------- */
 .search-and-filters {
   position: absolute;
   top: 110px;
   right: 40px;
   display: flex;
-  align-items: center;
   gap: 10px;
   z-index: 1000;
 }
-/* Search bar */
+
 .search-bar {
-  padding: 6px 8px;
-  font-family: inherit;
-  font-size: 0.9em;
-  border: 1px solid #ccc;
-  width: 180px;
-  border-radius: 4px;
-}
-/* Filter toggle button */
-.filter-toggle {
-  background: none;
-  border: 1px solid #ccc;
   padding: 6px 10px;
-  cursor: pointer;
-  font-family: inherit;
-  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 0.9em;
 }
-/* Filters dropdown */
-.filters {
+
+/* ---------- FILTER DROPDOWN ---------- */
+.filter-wrapper {
+  position: relative;
+}
+
+.filter-button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+/* Main dropdown */
+.filter-menu {
   position: absolute;
   top: 36px;
   right: 0;
-  padding: 14px;
-  border: 1px solid #ddd;
   background: #fafafa;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 250px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  display: none; /* initially hidden */
-  z-index: 1000;
-}
-.filters.show {
-  display: flex;
+  border: 1px solid #ddd;
+  width: 220px;
+  display: none;
 }
 
-/* Theme section */
-.theme-filter {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.filter-label {
-  font-size: 0.85em;
-  color: #444;
-}
-.theme-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* 3 columns */
-  gap: 4px 10px;
-}
-.theme-options label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.85em;
+.filter-wrapper.open .filter-menu {
+  display: block;
 }
 
-/* Clear filters button */
-.clear-filters {
-  background: #eee;
-  border: 1px solid #ccc;
-  color: #555;
-  padding: 6px 10px;
+/* Menu items */
+.filter-item {
+  padding: 8px 12px;
   cursor: pointer;
-  border-radius: 4px;
+  position: relative;
+  font-size: 0.9em;
 }
-.clear-filters:hover {
-  background: #e0e0e0;
+
+.filter-item:hover {
+  background: #eee;
+}
+
+/* ---------- SUBMENUS ---------- */
+.submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background: #fff;
+  border: 1px solid #ddd;
+  min-width: 200px;
+  display: none;
+}
+
+.filter-item:hover .submenu {
+  display: block;
+}
+
+/* Submenu options */
+.submenu div,
+.submenu label {
+  padding: 8px 10px;
+  display: block;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+
+.submenu div:hover,
+.submenu label:hover {
+  background: #f0f0f0;
+}
+
+/* ---------- THEMES GRID ---------- */
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px 10px;
+  padding: 10px;
+}
+
+/* ---------- POEMS ---------- */
+.poem-list ul {
+  margin-left: 20px;
 }
 </style>
 </head>
+
 <body>
 
 <header>
   <h1>Poetry Archive</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="poems.html">Poems</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-  </nav>
 </header>
 
 <main>
 
-<!-- SEARCH AND FILTERS -->
+<!-- SEARCH + FILTER -->
 <div class="search-and-filters">
-  <input type="text" id="searchFilter" placeholder="Search poems…" class="search-bar">
+  <input id="searchFilter" class="search-bar" placeholder="Search poems…">
 
-  <div class="filter-panel">
-    <button class="filter-toggle">Filters ▾</button>
-    <div class="filters" id="filtersDropdown">
-      <label>
-        Sort by:
-        <select id="sortSelect">
-          <option value="author">Author’s Choice</option>
-          <option value="date-desc">Newest → Oldest</option>
-          <option value="date-asc">Oldest → Newest</option>
-          <option value="alpha">A → Z</option>
-          <option value="alpha-reverse">Z → A</option>
-        </select>
-      </label>
+  <div class="filter-wrapper">
+    <button class="filter-button">Filters ▾</button>
 
-      <label>
-        Voice:
-        <select id="voiceFilter">
-          <option value="all">All</option>
-          <option value="personal">Personal</option>
-          <option value="persona">Persona</option>
-        </select>
-      </label>
+    <div class="filter-menu">
 
-      <div class="theme-filter">
-        <span class="filter-label">Themes</span>
-        <div class="theme-options">
-          <label><input type="checkbox" value="grief"> Grief</label>
-          <label><input type="checkbox" value="loss"> Loss</label>
-          <label><input type="checkbox" value="love"> Love</label>
-          <label><input type="checkbox" value="memory"> Memory</label>
-          <label><input type="checkbox" value="nostalgia"> Nostalgia</label>
-          <label><input type="checkbox" value="heartbreak"> Heartbreak</label>
-          <label><input type="checkbox" value="longing"> Longing</label>
+      <!-- SORT -->
+      <div class="filter-item">
+        Sort
+        <div class="submenu">
+          <div data-sort="author">Author’s Choice</div>
+
+          <div>
+            Alphabetical
+            <div class="submenu">
+              <div data-sort="alpha-asc">A → Z</div>
+              <div data-sort="alpha-desc">Z → A</div>
+            </div>
+          </div>
+
+          <div>
+            Date
+            <div class="submenu">
+              <div data-sort="date-desc">Newest → Oldest</div>
+              <div data-sort="date-asc">Oldest → Newest</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <button type="button" id="clearFilters" class="clear-filters">Clear filters</button>
+      <!-- VOICE -->
+      <div class="filter-item">
+        Voice
+        <div class="submenu">
+          <div data-voice="all">All</div>
+          <div data-voice="personal">Personal</div>
+          <div data-voice="persona">Persona</div>
+        </div>
+      </div>
+
+      <!-- THEMES -->
+      <div class="filter-item">
+        Themes
+        <div class="submenu">
+          <div class="theme-grid">
+            <label><input type="checkbox" value="grief"> Grief</label>
+            <label><input type="checkbox" value="loss"> Loss</label>
+            <label><input type="checkbox" value="love"> Love</label>
+            <label><input type="checkbox" value="memory"> Memory</label>
+            <label><input type="checkbox" value="nostalgia"> Nostalgia</label>
+            <label><input type="checkbox" value="heartbreak"> Heartbreak</label>
+            <label><input type="checkbox" value="longing"> Longing</label>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -174,53 +192,11 @@
   <h2 class="collapsible">Poems</h2>
   <div class="poem-list">
     <ul>
-      <li data-theme="grief loss memory nostalgia" data-date="2022-06-16" data-voice="personal">
-        <a href="poems/untitled.html">Untitled</a> — 16/06/2022
+      <li data-theme="grief loss" data-date="2022-06-16" data-voice="personal">
+        Untitled — 16/06/2022
       </li>
-      <li data-theme="loss grief memory nostalgia parents" data-date="2025-07-15" data-voice="personal">
-        <a href="poems/ghost.html">Ghost</a> — 15/07/2025
-      </li>
-      <li data-theme="love loss grief nostalgia emotional decay" data-date="2025-07-14" data-voice="persona">
-        <a href="poems/expired.html">Expired</a> — 14/07/2025
-      </li>
-      <li data-theme="romantic longing love unsaid thoughts" data-date="2025-06-16" data-voice="persona">
-        <a href="poems/yours.html">Yours</a> — 16/06/2025
-      </li>
-      <li data-theme="breakup heartbreak romantic decay toxic love" data-date="2025-06-14" data-voice="persona">
-        <a href="poems/us.html">Us.</a> — 14/06/2025
-      </li>
-      <li data-theme="emotional distance love loss silence longing" data-date="2025-06-21" data-voice="personal">
-        <a href="poems/silence.html">Silence</a> — 21/06/2025
-      </li>
-    </ul>
-  </div>
-</section>
-
-<section class="poem-section">
-  <h2 class="collapsible">Early Works</h2>
-  <p><em>A few poems from when I first started writing — imperfect, but a part of my journey.</em></p>
-  <div class="poem-list">
-    <ul>
-      <li data-theme="quiet heartbreak love loss unspoken pain" data-date="2022-07-04" data-voice="persona">
-        <a href="poems/untitled2.html">Untitled.</a> — 04/07/2022
-      </li>
-      <li data-theme="quiet heartbreak love loss unspoken pain" data-date="2022-07-22" data-voice="persona">
-        <a href="poems/untitled3.html">Untitled.</a> — 22/07/2022
-      </li>
-      <li data-theme="quiet heartbreak toxic love unspoken pain" data-date="2022-06-22" data-voice="persona">
-        <a href="poems/untitled4.html">Untitled.</a> — 22/06/2022
-      </li>
-      <li data-theme="quiet heartbreak love loss second chances" data-date="2022-06-23" data-voice="persona">
-        <a href="poems/anemptyslate.html">An Empty Slate.</a> — 23/06/2022
-      </li>
-      <li data-theme="quiet heartbreak love loss unspoken pain" data-date="2022-06-05" data-voice="persona">
-        <a href="poems/untitled5.html">Untitled.</a> — 05/06/2022
-      </li>
-      <li data-theme="quiet heartbreak regret emotional betrayal" data-date="2022-08-29" data-voice="persona">
-        <a href="poems/untitled6.html">Untitled.</a> — 29/08/2022
-      </li>
-      <li data-theme="quiet heartbreak love loss emotional despair" data-date="2022-07-09" data-voice="persona">
-        <a href="poems/untitled7.html">Untitled.</a> — 09/07/2022
+      <li data-theme="love nostalgia" data-date="2025-07-15" data-voice="personal">
+        Ghost — 15/07/2025
       </li>
     </ul>
   </div>
@@ -228,86 +204,45 @@
 
 </main>
 
-<footer>
-  &copy; 2026 AlixGHF. All rights reserved.
-</footer>
-
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
-  /* Collapsible poem sections */
-  document.querySelectorAll(".collapsible").forEach(header => {
-    header.addEventListener("click", () => {
-      const content = header.parentElement.querySelector(".poem-list");
-      content.classList.toggle("collapsed");
-      header.classList.toggle("collapsed");
+  const wrapper = document.querySelector(".filter-wrapper");
+  const search = document.getElementById("searchFilter");
+  const poems = document.querySelectorAll(".poem-list li");
+  let sortMode = "author";
+  let voiceMode = "all";
+
+  document.querySelector(".filter-button").onclick = () =>
+    wrapper.classList.toggle("open");
+
+  document.querySelectorAll("[data-sort]").forEach(el =>
+    el.onclick = () => { sortMode = el.dataset.sort; apply(); });
+
+  document.querySelectorAll("[data-voice]").forEach(el =>
+    el.onclick = () => { voiceMode = el.dataset.voice; apply(); });
+
+  function apply() {
+    let visible = [...poems];
+
+    visible.forEach(li => {
+      let show = true;
+      if (voiceMode !== "all" && li.dataset.voice !== voiceMode) show = false;
+      if (search.value && !li.textContent.toLowerCase().includes(search.value.toLowerCase())) show = false;
+      li.style.display = show ? "" : "none";
     });
-  });
 
-  /* Toggle filter dropdown */
-  const filterToggle = document.querySelector(".filter-toggle");
-  const filtersDropdown = document.getElementById("filtersDropdown");
-  filterToggle.addEventListener("click", () => {
-    filtersDropdown.classList.toggle("show");
-  });
+    visible = visible.filter(li => li.style.display !== "none");
 
-  /* Filtering logic */
-  const poemLists = document.querySelectorAll(".poem-list ul");
-  const themeCheckboxes = document.querySelectorAll(".theme-options input");
-  const searchInput = document.getElementById("searchFilter");
-  const sortSelect = document.getElementById("sortSelect");
-  const voiceFilter = document.getElementById("voiceFilter");
-  const clearFilters = document.getElementById("clearFilters");
+    if (sortMode === "alpha-asc") visible.sort((a,b)=>a.textContent.localeCompare(b.textContent));
+    if (sortMode === "alpha-desc") visible.sort((a,b)=>b.textContent.localeCompare(a.textContent));
+    if (sortMode === "date-asc") visible.sort((a,b)=>new Date(a.dataset.date)-new Date(b.dataset.date));
+    if (sortMode === "date-desc") visible.sort((a,b)=>new Date(b.dataset.date)-new Date(a.dataset.date));
 
-  const originalOrder = [...poemLists].map(ul => [...ul.children]);
-
-  function applyFilters() {
-    const sortValue = sortSelect.value;
-    const voiceValue = voiceFilter.value;
-    const searchValue = searchInput.value.toLowerCase();
-    const selectedThemes = [...themeCheckboxes].filter(cb => cb.checked).map(cb => cb.value);
-
-    poemLists.forEach((ul, index) => {
-      let poems = [...ul.children];
-
-      poems.forEach(li => {
-        let visible = true;
-        const themes = (li.dataset.theme || "").toLowerCase();
-        if (voiceValue !== "all" && li.dataset.voice !== voiceValue) visible = false;
-        if (searchValue && !li.textContent.toLowerCase().includes(searchValue)) visible = false;
-        if (selectedThemes.length && !selectedThemes.some(t => themes.includes(t))) visible = false;
-        li.style.display = visible ? "" : "none";
-      });
-
-      let visiblePoems = poems.filter(li => li.style.display !== "none");
-
-      if (sortValue === "author") {
-        ul.innerHTML = "";
-        originalOrder[index].forEach(li => ul.appendChild(li));
-        return;
-      }
-      if (sortValue === "alpha") visiblePoems.sort((a,b) => a.textContent.localeCompare(b.textContent));
-      if (sortValue === "alpha-reverse") visiblePoems.sort((a,b) => b.textContent.localeCompare(a.textContent));
-      if (sortValue === "date-desc") visiblePoems.sort((a,b) => new Date(b.dataset.date) - new Date(a.dataset.date));
-      if (sortValue === "date-asc") visiblePoems.sort((a,b) => new Date(a.dataset.date) - new Date(b.dataset.date));
-
-      visiblePoems.forEach(li => ul.appendChild(li));
-    });
+    visible.forEach(li => li.parentElement.appendChild(li));
   }
 
-  sortSelect.onchange = applyFilters;
-  voiceFilter.onchange = applyFilters;
-  searchInput.oninput = applyFilters;
-  themeCheckboxes.forEach(cb => cb.onchange = applyFilters);
-
-  /* Clear filters */
-  clearFilters.onclick = () => {
-    sortSelect.value = "author";
-    voiceFilter.value = "all";
-    searchInput.value = "";
-    themeCheckboxes.forEach(cb => cb.checked = false);
-    applyFilters();
-  };
+  search.oninput = apply;
 });
 </script>
 
